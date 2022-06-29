@@ -1,0 +1,154 @@
+ESERCITAZIONE 1
+
+Il package più importante che andremo quasi sempre ad utilizzare è:
+
+java.net
+
+può essere suddiviso in
+
+    - Lowest Level API che si occupa delle seguenti astrazioni:
+
+        1. Address: identificatori di rete come gli indirizzi IP
+        2. Socket: i meccanismi di base di comunicazione bidirezionale
+        3. Interface: interfacce di rete
+
+    - Hig Level API che si occupa delle seguenti astrazioni:
+
+        1. URL
+        2. Connection: le connessioni alla risposta puntata dall'URL
+
+Una classe che utilizzeremo molto è la jav.net.InetAddress che presenta i seguenti metodi:
+
+    - static InetAddress getByName(String host): restituisce l'indirizzo IP di un dato host;
+    - static InetAddress[] gatAllByName(String host): restituisce tutti gli indirizzi IP di un dato host;
+    - static InetAddress getLocalHost(): restituisce l'indirizzo IP del local host
+    - byte[] getAddress(): resittuisce l'indirizzo IP sotto forma di array di byte
+    - String getHostAddress(): restituisce l'indirizzo IP sotto forma di stringa (es "192.168.35.75")
+    - String getHostName(): restituisce l'hostname associato all'indirizzo IP
+
+Le macchine devono comunicare tramite un canale di comunicazione. In java questi stream di dati vengono implementati
+tramite il package:
+
+java.io
+
+Ci sono due tipi di stream:
+
+    - Dati Binari: creati per creare seuqenze di caratteri codificate a 8bit
+    - Dati di caratteri: creati per creare sequenze di caratter codificate a 16bit
+
+I flussi devono avere sorgenti e destinazioni:
+
+    - Se voglio definire una sorgente:
+
+        1. Binari -> InputStream
+        2. Caratteri -> Reader
+
+    - Se voglio definire una destinzaione:
+
+        1. Binari -> OutputStream
+        2. Caratteri -> Writer
+
+Il package java.io ci mette a disposizione una serie di classi:
+
+LETTURA:
+
+    - La classe astratta InputStream tramite il metodo read() legge un byte alla volta
+    - La classe astratta Reader tramite il metodo read() legge un caratttere alla volta
+    - La classe concreta InputStreamReader permette di convertire un flusso di input binario in un flusso di input di caratteri
+    - La classe concreta BufferedReader tramite readLine() legge un carattere alla volta fino a ottenere una linea
+
+SCRITTURA:
+
+    - La classe astratta OutoutStream tramite il metodo write() scrive un byte alla volta
+    - La classe astratta Writer tramite il metodo write(9 scrive un carattere alla volta
+    - La classe concreta OutputStreamWriter permette di convertire un flusso di output di caratteri in un flusso di output binario
+    - La classe concreta PrintWriter tramite println() scrive numeri e stringhe in singoli caratteri
+
+Il package che utilizzeremo per creare i socket è il java.net.Socket.
+
+    - Socket(String host, int port): crea un socket e lo connette all'host ed alla porta specificati; host è un hostname oppure un indirizzo IP.
+    - Socket(InetAddress address, int port): crea un socket e lo connette all'indirizzo e alla porta desiderati
+    - void close(): chiude il socket
+    - InetAddress getInetAddress(): restituisce l'indirizzo a cui è connesso il socket
+    - int getPort(): restituisce la porta remota a cui è connesso il socket
+    - int getLocalPort(): restituisce la porta locale del socket
+    - InputStream getInputStream(): restituisce lo stream di input del socket; questo stream è utilizzato per leggere i dati provenienti dal socket
+    - OutputStream getOutputStream(): restituisce lo stream di output del socket; questo stream è utilizzato per scrivere dati nel socket
+    - void setSoTimeout(int timeout): imposta il timeout per operazioni di lettura dal socket; se il tempo specificato trascorre genera una InterruptedException
+    - String toString(): restituisce una rappresentazione del socket
+
+ESERCITAZIONE 2
+
+Da parte del lato server utilizziamo il package java.net.ServerSocket, i metodi disponibili e utili sono:
+
+    - ServerSocket(int port): crea un server socket che controlla la porta indicata
+    - Socket accept(): rimane in attesa di una connessione, e restituisce un socket tramite il quale si effettua una comunicazione
+    - void close(): chiude il server socket
+    - InetAddress getInetAddress(): restituisce l'indirizzo locale di questo server socket
+    - int getLocalPort(): restituisce la porta locale di questo server socket
+
+Il metodo flush() svuota il flusso di output e forza la scrittura di tutti i byte di output bufferizzati
+flush() dovrebbe essere chiamato se alcuni byte precedentemente scritti sono stati bufferizzati dall'implementazione del flusso di output
+Se come secondo parametro di un PrintWriter mettiamo "true" utilizziamo l'autoFlush
+
+Un altro package utile è, nel caso in cui volessimo instaurare una connessione UDP non sicura, senza connessione e che fa usa di datagrammi: java.net.DatagramSocket
+I metodi utili sono:
+
+    - DatgramSocket () thows SocketException: crea un DatagramSocket e lo collega a una porta qualsiasi sulla macchina locale. Solleva eccezione se non si hanno i permessi necessari
+    - DatagramSocket(int port): crea un DatgramSocket e lo collega alla porta specificata sulla macchina locale
+    - void receive (DatagramPacket p): riceve un DtagramPacket su questo socket
+    - void send (DatagramPacket p): invia un DatagramPacket su questo socket
+    - void close(): chiede il DatagramSocket
+
+Ad accompagnare la classe precedente vi è il package java.net.DatagramPacket  i cui metodi più importanti sono:
+
+    - DatagramPacket ( byte[] buf, int length ): crea uun DatagramPacket per ricevere pacchetti di lunghezza length
+    - DatgramPcket (byte[] buf, int length, InetAddress address, int port): crea un DatagramPacket per inviae pacchetti di lunghezza length all'host e alla porta specificati
+    - InetAddress getAddress(): restituisce l'indirizzo IP della macchina alla quale questo DatagramPacket deve essere inviato o da cui è stato ricevuto
+    - int getPort(): restituisce la porta della macchian alla quale questo DatagramPacket deve essere inviato o da cui è stato ricevuto
+
+ESERCITAZIONE 3
+
+Nel package java.net.MulticastSocket si hanno funzionalità aggiuntive per unirsi a gruppi o altri holt multicast sulla rete.
+Un gruppo multicast è identificato da un indirizzo IP e da una porta standard UDP
+È utile per spedire e ricevere pacchetti in multicast. MulticastSocket estende DatagramSocket. I metodi utili sono
+
+    - MulticastSocket(int port): crea un MulticastSocket e lo collega alla porta specficata sulla macchina locale
+    - void joinGroup (InetAddress mcastAddr): si collega a un gruppo multicast
+    - void leaveGroup (InetAddress mcastAddr0: lascia un gruppo multicast
+    - void receive (DatagramPacket p): riceve un DtagramPacket su questo socket
+    - void send (DatagramPacket p): invia un DatagramPacket su questo socket
+    - void close(): chiede il DatagramSocket
+
+La classe URL facente parte del packege java.net.URL presenta i seguenti metodi:
+
+    - URL (String spec): crea un oggetto URL a partire dalla stringa che lo rappresenta
+    - URL (String prtocol, String host, int port, String file): crea un URL a partire dai compoenti specificati
+    - URLConnection openConnection(): restituisce un oggetto URLConnectione che gestisce la connessione diretta alla risorsa
+    - InputStream openStream(); apre un flusso di input per la lettura dei dati della risorsa
+    - Serie di getter che possono accedere alle vaie sezioni dell'URL
+
+
+Un altro package utile è java.net.URLConnection che presente i seguenti metodi
+
+    - void setDoInput(boolean doInput): se imposto il booleano a true, l'utente può ricevere l'input da questo URLConnection
+    - void setDoOutput(boolean doOutput): se doOutput è true, l'utente può ricevere l'output da questo URLConnection
+    - void setIfModifieSince(long time): configura questo URLConnection per recuperare solo i dati che sono stati modificati dopo la data indicata
+    - void setUseCaches(boolean useCaches): se il booleano è true i dati possnon essere recuperati da una cache locale
+    - void setAllowUserInteraction(boolean allowUserInteraction): se true all'utente può essere richiesto un input addizionale
+    - void setRequestProperty(String key, String value): imposta una proprietà della richiesta
+    - String getHeaderFieldKey(int n): recupera l'n-esima chiave del campo di intestazione
+    - String getHeaderField(int n): recupera l'n-esimo valore del campo di intestazione
+
+
+
+
+
+
+
+
+
+
+
+
+
