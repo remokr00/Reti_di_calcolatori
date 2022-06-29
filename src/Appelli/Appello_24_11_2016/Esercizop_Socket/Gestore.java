@@ -27,8 +27,15 @@ public class Gestore {
     private HashMap<InetAddress, OffertaRisorsa> database;
     private final int portaPerElaboratori = 3000; //porta su cui ascolta il primo ServerSocket
     private final int portaPerClient = 2000; //porta su cui ascolta il secondo ServerSocket
+    private Socket elaboratore;
+    private Socket client;
     private ServerSocket serverSocket1;
     private ServerSocket serverSocket2;
+
+    /*
+    Ho cercato di creare tutte le variabili possibili per evitare di doverle passare come parametri ai vari thread e metodi
+    in questo modo le ho rese visibili a tutte le classi di questo file
+     */
 
     /*
     Il costruttore è abbastanza articolato in quanto per il client devo gestire connessioni
@@ -56,16 +63,9 @@ public class Gestore {
             serverSocket1 = new ServerSocket(portaPerElaboratori);
             //non devo gestire connessioni multiple in questo caso quindi
             //mi basta fare:
-            Socket elaboratore = serverSocket1.accept();
+            elaboratore = serverSocket1.accept();
             //avvio i thread per la gestione degli elaboratori
-            /*
-            Invio il database al thread perché, trovandosi in un'altra
-            classe questo poi non sarebbe visibile per l'aggiornamento.
-
-            Invio il socket elaboratore altrimenti non potrei leggere dal socket
-            sempre perché si trova in una classe differente
-             */
-            new ThreadElaboratori(database, elaboratore).start();
+            new ThreadElaboratori().start();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -79,12 +79,9 @@ public class Gestore {
             //passo 1. Inizializzo il serverSocket
             serverSocket2 = new ServerSocket(portaPerClient);
             /*
-            passo 2. Poiché devo gestire le conessioni multiple devo demandare
-            l'instaurazione delle connessioni ad un thread a parte. A questo
-            thread passo il serverSocket due per poter poi utilizzare il metodo
-            accept
+            passo 2. Avvio il thread per le gestioni delle connessioni multiple
              */
-            new AvviaConnessioni(serverSocket2).start();
+            new AvviaConnessioni().start();
             /*
             Per vedere passo 3 verificare la classe avviaConnessioni.
              */
@@ -99,40 +96,20 @@ public class Gestore {
     avviare le connesisoni multiple, si riprende dal passo 3
      */
     class AvviaConnessioni extends Thread{
-
-        //Passo 3.
-        //creo come variabile di istanza il
-        //server socket per avviare le connessioni multiple
-        private ServerSocket serverSocket1;
-
-        //passo 4. inizializzo il costruttore
-        public AvviaConnessioni(ServerSocket s){
-            try{
-                serverSocket1 = s;
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-
         /*
-        passo 5.
+        passo 3.
         Creo il metodo run per l'avvio di connessioni multiple
          */
         public void run(){
             try{
-                //passo 6 accetto connesisoni in un while true
+                //passo 4. accetto connesisoni in un while true
                 while (true){
-                    Socket client = serverSocket1.accept();
-                    //passo 7.
+                    client = serverSocket1.accept();
+                    //passo 5.
                     /*
-                    Per gestire in maniera simultanea i client lancio i vari thread
-                    ai quali passo il socket perché trovandosi in classi diverse
-                    non sarei ingrado di scrivere e/o leggere dagli stream
-
-                    Passo anche il database perché altrimenti, essendo in un altra classe
-                    non lo potrei consultare
+                    Per gestire in maniera simultanea i client lancio il thread
                      */
-                    new GestisciClient(database, client).start();
+                    new GestisciClient().start();
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -145,18 +122,6 @@ public class Gestore {
     da parte degli elaboratori
      */
     class ThreadElaboratori extends Thread{
-
-        //creo una variabile di istanza per mantenere il database
-        private HashMap<InetAddress, OffertaRisorsa> databse;
-        private Socket elaboratore;
-
-        /*
-        Avendo passato un parametro al thread creo il costruttore
-         */
-        public ThreadElaboratori(HashMap<InetAddress, OffertaRisorsa> d, Socket e){
-            database = d;
-            elaboratore = e;
-        }
 
         /*
         Creo ora il metodo run per la gestione delle operazioni
@@ -193,15 +158,6 @@ public class Gestore {
     La seguente classe serve per gestire le richieste del client
      */
     class GestisciClient extends Thread{
-
-        //creo la variabile client
-        private Socket client;
-        private HashMap<InetAddress, OffertaRisorsa> database;
-
-        public GestisciClient(Socket c, HashMap<InetAddress, OffertaRisorsa> d){
-            client = c;
-            database = d;
-        }
 
         /*
         Nel metodo run eseguo le richieste
