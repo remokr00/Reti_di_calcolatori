@@ -1,8 +1,7 @@
-package Appelli.Appello_24_11_2016.Esercizop_Socket;
+package Appelli.Appello_24_09_2016.Esercizop_Socket;
 
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Elaboratore {

@@ -1,10 +1,10 @@
-package Appelli.Appello_24_11_2016.Esercizop_Socket;
+package Appelli.Appello_24_09_2016.Esercizop_Socket;
 
-public class RichiestaRisorsa {
+public class OffertaRisorsa {
 
     private String nome, tipo, descrizione;
 
-    public RichiestaRisorsa(String nome, String tipo, String descrizione){
+    public OffertaRisorsa(String nome, String tipo, String descrizione){
         this.nome = nome;
         this.tipo = tipo;
         this.descrizione = descrizione;

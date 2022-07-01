@@ -1,8 +1,5 @@
-package Appelli.Appello_24_11_2016.Esercizop_Socket;
+package Appelli.Appello_24_09_2016.Esercizop_Socket;
 
-import EserciziPerIlaria.Es1TCP.Server;
-
-import java.io.BufferedReader;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;

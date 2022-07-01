@@ -1,4 +1,4 @@
-package Appelli.Appello_24_11_2016.Esercizio_WS;
+package Appelli.Appello_24_09_2016.Esercizio_WS;
 
 import java.util.HashMap;
 import java.util.Map;
