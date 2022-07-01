@@ -2,18 +2,17 @@ package Appelli.Appello_20_06_2020.EsercizioSocket;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Centralina {
 
-    private HashMap<String, Double> grandezze;
+    private List<Double> grandezze; //suppongo pos 0 = temperatura pos 1 = umidità pos 2 = pressione
     private int id;
     private Socket centralina1;
     private DatagramSocket centralina2;
@@ -23,7 +22,7 @@ public class Centralina {
 
     public Centralina(int id){
         this.id = id;
-        grandezze = new HashMap<>();
+        grandezze = new ArrayList<>();
         System.out.println("Avvio la centralina "+ id);
         avvia();
     }
@@ -63,11 +62,11 @@ public class Centralina {
 
             public void run(){
                 try{
-                    for(Map.Entry<String, Double> entry : grandezze.entrySet()){
-                        double valore = entry.setValue((Math.random()*30)+1);
+                    for(int i=0; i<grandezze.size(); i++){
+                         grandezze.set(i, (Math.random()*30)+1 ) ;
                         //Invio al server i dati sulla porta UDP
                         byte buffer[];
-                        buffer = (""+valore).getBytes();
+                        buffer = (""+grandezze.get(i)).getBytes();
                         InetAddress indirizzoServer = InetAddress.getByName(host);
                         DatagramPacket packet = new DatagramPacket(buffer, buffer.length, indirizzoServer , serverPort2);
                         centralina2.send(packet);
@@ -76,6 +75,18 @@ public class Centralina {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public static void main(String ... args){
+        try{
+            int id = 0;
+            while(id <10){
+                Centralina c = new Centralina(id);
+                id++;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
