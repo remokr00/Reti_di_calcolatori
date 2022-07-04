@@ -11,8 +11,8 @@ public class ServerGenericoBetServer {
     public ServerGenericoBetServer(int param1, int param2, int paramN){
         try{
             //inizializzo le variabili e chiamo i thread ai quali eventualmente passo parametri utili
-            new threadRichiesta.start(var1,var2,varN);
-            new threadRisposta.start();
+            //new threadRichiesta.start(var1,var2,varN);
+            //new threadRisposta.start();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -29,8 +29,8 @@ public class ServerGenericoBetServer {
     private void avvia(int param1, int paramN){
         try{
             //inizializzo i socket e chiamo i thread ai quali eventualmente passo parametri utili
-            new threadRichiesta.start(var1,var2,varN);
-            new threadRisposta.start();
+            //new threadRichiesta.start(var1,var2,varN);
+            //new threadRisposta.start();
         }catch (Exception e){
             e.printStackTrace();
         }

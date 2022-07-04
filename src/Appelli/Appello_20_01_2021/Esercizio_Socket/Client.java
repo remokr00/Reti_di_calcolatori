@@ -20,11 +20,13 @@ public class Client {
             System.out.println("La misura del sensore: "+misura.getId()+ "è di "+misura.getValore());
 
             MulticastSocket mClient = new MulticastSocket(5000);
+            InetAddress mIndirizzo = InetAddress.getByName("server.it");
+            mClient.joinGroup(mIndirizzo);
             byte[] buffer = new byte[256];
             DatagramPacket paccheto = new DatagramPacket(buffer, buffer.length);
             mClient.receive(paccheto);
             System.out.println(paccheto.getData());
-
+            mClient.leaveGroup(mIndirizzo);
         }catch (Exception e){
             e.printStackTrace();
         }
