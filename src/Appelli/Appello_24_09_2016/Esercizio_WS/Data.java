@@ -10,6 +10,7 @@ public class Data {
         anno = a;
     }
 
+
     public int getAnno() {
         return anno;
     }
