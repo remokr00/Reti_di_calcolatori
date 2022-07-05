@@ -22,7 +22,7 @@ public class Azienda extends Thread{
     public Azienda(){
         try{
             azienda1 = new Socket(host, serverPort1);
-            azienda2 = new Socket(host, serverPort2);
+            azienda2 = new ServerSocket(serverPort2);
              }catch (Exception e){
             e.printStackTrace();
         }
@@ -42,7 +42,6 @@ public class Azienda extends Thread{
             System.out.println("Ho ricevuto l'id della mia offerta.");
 
             //Rimango in attesa di eventuali offerte di lavoro
-            azienda2 = new ServerSocket(serverPort2);
             Socket server = azienda2.accept();
             input2 = new BufferedReader(new InputStreamReader(server.getInputStream()));
             String candidatura = input2.readLine();
