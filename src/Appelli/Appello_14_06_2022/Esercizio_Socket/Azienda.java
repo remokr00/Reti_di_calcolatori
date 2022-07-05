@@ -3,6 +3,7 @@ package Appelli.Appello_14_06_2022.Esercizio_Socket;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Azienda extends Thread{
@@ -10,7 +11,8 @@ public class Azienda extends Thread{
     private final int serverPort1 = 3000;
     private final int serverPort2 = 5000;
     private final String host = "job.unical.it";
-    private Socket azienda1, azienda2;
+    private Socket azienda1;
+    private ServerSocket azienda2;
     private ObjectOutputStream output;
     private BufferedReader input1;
     private BufferedReader input2;
@@ -40,7 +42,9 @@ public class Azienda extends Thread{
             System.out.println("Ho ricevuto l'id della mia offerta.");
 
             //Rimango in attesa di eventuali offerte di lavoro
-            input2 = new BufferedReader(new InputStreamReader(azienda2.getInputStream()));
+            azienda2 = new ServerSocket(serverPort2);
+            Socket server = azienda2.accept();
+            input2 = new BufferedReader(new InputStreamReader(server.getInputStream()));
             String candidatura = input2.readLine();
             System.out.println("Ho ricevuto la seguente candidatura: "+candidatura);
 

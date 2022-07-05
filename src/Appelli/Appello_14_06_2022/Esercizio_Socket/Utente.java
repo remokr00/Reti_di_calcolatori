@@ -20,7 +20,7 @@ public class Utente extends Thread{
     public Utente(){
         try{
             client = new Socket(host, serverPort);
-            clientMulticast = new MulticastSocket();
+            clientMulticast = new MulticastSocket(multicastPort);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -43,6 +43,10 @@ public class Utente extends Thread{
             String candidatura = parti[1]+"#www.mioCurriculum.it";
             output = new PrintWriter(client.getOutputStream(), true);
             output.println(candidatura);
+
+            output.close();
+            client.close();
+            clientMulticast.leaveGroup(indirizzoMulticast);
 
         }catch (Exception e){
             e.printStackTrace();
