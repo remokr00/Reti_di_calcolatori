@@ -1,4 +1,4 @@
-package Appelli.Appello_11_11_2020;
+package Appelli.Appello_11_11_2020.Esercizio_WS;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,11 +16,18 @@ public class AziendaService {
     è void il risultato
      */
     public void Vendita(int id, String nome, Double importo){
-       for(Map.Entry<Integer, ArrayList<IncassoProdotto>> entry: databse.entrySet()){
+        boolean trovato = false;
+        for(Map.Entry<Integer, ArrayList<IncassoProdotto>> entry: databse.entrySet()){
            if(entry.getKey() == id){
+               trovato = true;
                ArrayList<IncassoProdotto> listaVini = entry.getValue();
                listaVini.add(new IncassoProdotto(nome, ""+importo));
            }
+       }
+       if(!trovato){
+           ArrayList<IncassoProdotto> nuovaLista = new ArrayList<>();
+           nuovaLista.add(new IncassoProdotto(nome, ""+importo));
+           databse.put(id, nuovaLista);
        }
     }
 

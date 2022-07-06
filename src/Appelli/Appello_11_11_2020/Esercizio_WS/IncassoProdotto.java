@@ -1,4 +1,4 @@
-package Appelli.Appello_11_11_2020;
+package Appelli.Appello_11_11_2020.Esercizio_WS;
 
 public class IncassoProdotto {
 
